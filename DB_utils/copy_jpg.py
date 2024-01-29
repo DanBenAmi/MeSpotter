@@ -21,6 +21,6 @@ def copy_jpg_files(source_dir, dest_dir):
 
 if __name__ == "__main__":
     source_directory_path = r'/Users/danbenami/Desktop/תמונות מלחמה 2'
-    destination_directory_path = '/Users/danbenami/Desktop/MeSpotter/Data/reserve'
+    destination_directory_path = '/DataBase/reserve'
 
     copy_jpg_files(source_directory_path, destination_directory_path)

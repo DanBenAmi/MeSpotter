@@ -1,2 +1,2 @@
-# MeSpotter-
+# MeSpotter
 Personal Presence Classifier
