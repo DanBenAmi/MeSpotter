@@ -3,11 +3,18 @@ import os
 import shutil
 from PIL import Image
 import matplotlib.pyplot as plt
+import numpy as np
+import dlib
+import sys
+
+project_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+os.chdir(project_dir)
+
+from face_detectors import *
 
 def DB_to_FaceDB(DB_path, FaceDB_path, face_img_size=None):
 
-    # Load the face detector
-    face_cascade = cv2.CascadeClassifier(r'../haarcascade_frontalface_default.xml')
+    face_detector = face_detectors()     # initial the face detectors
 
     for root, dirs, files in os.walk(DB_path):
         for file in files:
@@ -15,20 +22,18 @@ def DB_to_FaceDB(DB_path, FaceDB_path, face_img_size=None):
                 # Construct the full file path
                 file_path = os.path.join(root, file)
                 # Read the input image
-                img = cv2.imread(file_path)
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-                # Convert into grayscale
-                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                gray = cv2.equalizeHist(gray)
-                # Detect faces
-                faces_coords = face_cascade.detectMultiScale(gray, 1.25, 6)
-                for (x, y, w, h) in faces_coords:
-                    face = Image.fromarray(img).crop((x, y, x + w, y + h))
-                    face.save(FaceDB_path)
+                img_BGR = cv2.imread(file_path)
+                img_RGB = cv2.cvtColor(img_BGR, cv2.COLOR_BGR2RGB)
 
+                # Detect faces
+                faces = face_detector.detect_faces(img_BGR)
+
+                for idx, (startX, startY, endX, endY) in enumerate(faces):
+                    face = Image.fromarray(img_RGB).crop((startX, startY, endX, endY))
+                    face.save(os.path.join(FaceDB_path,f'{file[:-4]}_{idx}.jpg'))
 
 
 if __name__=='__main__':
-    DB_to_FaceDB('../DataBase/ImageDB/reserve', '../DataBase/FaceDB')
+    DB_to_FaceDB('DataBase/ImageDB/reserve', 'DataBase/FaceDB')
 
 
