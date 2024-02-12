@@ -10,7 +10,7 @@ class LabelingApp:
     def __init__(self, master):
         self.master = master
         self.master.title("Labeling Tool")
-        self.master.geometry("530x800+400+100")
+        self.master.geometry("530x900+400+100")
 
         self.new_df = False
         self.df = None
