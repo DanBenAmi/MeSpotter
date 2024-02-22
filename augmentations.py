@@ -232,15 +232,16 @@ class RandomRotateCrop(object):
         "Done"
 
 
-def get_augmentations(augmentations):
+def get_augmentations(augmentations, size):
     # Define a dictionary mapping augmentation names to their corresponding torchvision transforms
     all_augmentations = {
-        "random_resize_crop": transforms.RandomResizedCrop(size=(160,112), scale=(0.9, 1.0), ratio=(0.75, 1),
+        "random_rotate_crop": RandomRotateCrop(max_angle=80),
+        "random_resize_crop": transforms.RandomResizedCrop(size=size[1:], scale=(0.9, 1.0), ratio=(0.75, 1),
                                                            interpolation=InterpolationMode.BILINEAR),
+        "Resize": transforms.Resize(size=size[1:], interpolation=InterpolationMode.BICUBIC),
         "random_color_jitter": transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
         "random_horizontal_flip": transforms.RandomHorizontalFlip(p=0.5),
         "random_blur": transforms.GaussianBlur(kernel_size=(5, 9), sigma=(0.1, 5)),
-        "random_rotate_crop": RandomRotateCrop(max_angle=80)
         # Add more standard augmentations for faces here
     }
 

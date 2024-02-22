@@ -1,28 +1,31 @@
 
-image_dir_path: "/path/to/images"
+image_dir_path: DataBase/FaceDB
 
 model:
-  architecture: "resnet50"  # 'resnet50'/'vgg16'/'efficientnet_b0'/'vit_base_patch16_224'
-  input_size: 224
+  architecture: vgg16  # 'resnet50'/'vgg16'/'efficientnet_b0'/'vit_base_patch16_224'
+  input_size: [3,224,224]
   num_classes: 3
-  weights_path: "NONE"
+  weights_path: NONE
 
 train:
   epochs: 30
   batch_size: 32
-  num_workers: 1
-  lr_scheduler: "StepLR"  # 'StepLR'/'ExponentialLR'/'ReduceLROnPlateau'/...
+  num_workers: 0
+  lr_scheduler: StepLR  # 'StepLR'/'ExponentialLR'/'ReduceLROnPlateau'/...
   lr_scheduler_params:
-    step_size: 10
-    gamma: 0.1
-  optimizer: "Adam" # 'RMSprop'/'Adam'/'SGD'/...
+    step_size: 1
+    gamma: 0.9
+  optimizer: Adam # 'RMSprop'/'Adam'/'SGD'/...
   optimizer_params:
     lr: 0.001
-  labels_table_path: "/path/to/training_data.xlsx"
-  augmentations: ["random_rotate", "random_blur", "random_color_jitter"]
+  labels_table_path: DataBase/FaceDB/labels.xlsx
+  augmentations: ["random_rotate_crop", "Resize", "random_blur", "random_color_jitter"] # "random_resize_crop"/"random_color_jitter"/"random_horizontal_flip"/"random_blur"/"random_rotate_crop"
+  epochs_between_eval: 3
+  epochs_between_ckpt: 3
+
 
 valid:
   batch_size: 32
-  num_workers: 1
-  labels_table_path: "/path/to/evaluation_data.xlsx"
-  augmentations: ["random_rotate", "random_color_jitter"]
+  num_workers: 0
+  labels_table_path: DataBase/FaceDB/labels.xlsx
+  augmentations: ["Resize"]
